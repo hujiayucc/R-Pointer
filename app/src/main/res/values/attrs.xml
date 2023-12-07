@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Base.Theme.RPointer">
+        <attr name="headerTextColor" format="reference|color"/>
+    </declare-styleable>
+</resources>
