@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.pm20.util.archivesName
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -13,14 +15,21 @@ android {
         minSdk = 24
         //noinspection EditedTargetSdkVersion
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-
+        versionCode = 100
+        versionName = "1.0.0"
+        project.archivesName = "${rootProject.name}-${versionName}(${versionCode})"
     }
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
+
+        debug {
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
@@ -45,6 +54,7 @@ android {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
+    //noinspection GradleDependency
     implementation("com.google.android.material:material:1.5.0")
 
     val yukiVersion = "1.2.0"

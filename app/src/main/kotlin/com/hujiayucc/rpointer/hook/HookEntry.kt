@@ -47,7 +47,6 @@ object HookEntry : IYukiHookXposedInit {
                 YLog.Configs.isEnable = false
                 before {
                      bitmap?.let { result = PointerIcon.create(it,0f,0f) }
-
                 }
             }
         }
