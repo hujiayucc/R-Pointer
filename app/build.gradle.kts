@@ -17,7 +17,7 @@ android {
         targetSdk = 34
         versionCode = 100
         versionName = "1.0.0"
-        project.archivesName = "${rootProject.name}-${versionName}(${versionCode})"
+        project.archivesName = "${rootProject.name}-${versionName}"
     }
 
     buildTypes {
