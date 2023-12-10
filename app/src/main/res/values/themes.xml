@@ -2,7 +2,10 @@
     <!-- Base application theme. -->
     <style name="Base.Theme.RPointer" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@android:color/holo_blue_light</item>
         <item name="headerTextColor">@color/white</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
     </style>
 
     <style name="Theme.RPointer" parent="Base.Theme.RPointer"/>

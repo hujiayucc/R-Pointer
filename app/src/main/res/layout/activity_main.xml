@@ -1,110 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical"
-    tools:context=".ui.MainActivity">
+    android:fitsSystemWindows="true">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:layout_height="wrap_content"
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <LinearLayout
-        android:id="@+id/main_active_status"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginBottom="5dp"
-        android:background="@drawable/bg_header"
-        android:elevation="0dp"
-        android:gravity="center">
-
-        <androidx.constraintlayout.utils.widget.ImageFilterView
-            android:id="@+id/main_img_status"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginEnd="5dp"
-            android:src="@drawable/ic_warn"
-            tools:ignore="ContentDescription,ImageContrastCheck"/>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingTop="10dp"
-            android:paddingRight="20dp"
-            android:paddingBottom="10dp">
+            android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:id="@+id/main_active_status"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="5dp"
-                android:gravity="center|start"
-                android:orientation="vertical"
-                tools:ignore="UselessParent">
+                android:background="@drawable/bg_header"
+                android:elevation="0dp"
+                android:gravity="center">
 
-                <TextView
-                    android:id="@+id/main_status"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:text="@string/not_active"
-                    android:textColor="?attr/headerTextColor"
-                    android:textSize="18sp"
-                    tools:ignore="TextContrastCheck"/>
+                <androidx.constraintlayout.utils.widget.ImageFilterView
+                    android:id="@+id/main_img_status"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_marginStart="25dp"
+                    android:layout_marginEnd="5dp"
+                    android:src="@drawable/ic_warn"
+                    tools:ignore="ContentDescription,ImageContrastCheck"/>
 
-                <TextView
-                    android:id="@+id/main_framework"
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:alpha="0.8"
-                    android:text="@string/main_framework"
-                    android:textColor="?attr/headerTextColor"
-                    android:textSize="13sp"
-                    android:visibility="gone"/>
+                    android:paddingLeft="20dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="20dp"
+                    android:paddingBottom="10dp">
 
-                <TextView
-                    android:id="@+id/main_version"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:alpha="0.8"
-                    android:text="@string/main_version"
-                    android:textColor="?attr/headerTextColor"
-                    android:textSize="13sp"
-                    tools:ignore="TextContrastCheck"/>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:gravity="center|start"
+                        android:orientation="vertical"
+                        tools:ignore="UselessParent">
 
-                <TextView
-                    android:id="@+id/main_date"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:alpha="0.8"
-                    android:text="@string/main_version"
-                    android:textColor="?attr/headerTextColor"
-                    android:textSize="13sp"
-                    tools:ignore="TextContrastCheck"/>
+                        <TextView
+                            android:id="@+id/main_status"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:text="@string/not_active"
+                            android:textColor="?attr/headerTextColor"
+                            android:textSize="18sp"
+                            tools:ignore="TextContrastCheck"/>
+
+                        <TextView
+                            android:id="@+id/main_framework"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:alpha="0.8"
+                            android:text="@string/main_framework"
+                            android:textColor="?attr/headerTextColor"
+                            android:textSize="13sp"
+                            android:visibility="gone"/>
+
+                        <TextView
+                            android:id="@+id/main_version"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:alpha="0.8"
+                            android:text="@string/main_version"
+                            android:textColor="?attr/headerTextColor"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck"/>
+
+                        <TextView
+                            android:id="@+id/main_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.8"
+                            android:text="@string/main_version"
+                            android:textColor="?attr/headerTextColor"
+                            android:textSize="13sp"
+                            tools:ignore="TextContrastCheck"/>
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:clipToPadding="false"/>
-</LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:fitsSystemWindows="true"
+                android:clipToPadding="false" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

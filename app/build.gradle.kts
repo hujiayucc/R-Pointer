@@ -54,8 +54,7 @@ android {
 
 dependencies {
     implementation("androidx.core:core-ktx:1.12.0")
-    //noinspection GradleDependency
-    implementation("com.google.android.material:material:1.5.0")
+    implementation("com.google.android.material:material:1.10.0")
 
     val yukiVersion = "1.2.0"
     implementation("com.highcapable.yukihookapi:api:$yukiVersion")
