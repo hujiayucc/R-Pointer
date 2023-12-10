@@ -22,6 +22,8 @@ import com.hujiayucc.rpointer.appliication.Application
 object HookEntry : IYukiHookXposedInit {
 
     private var bitmap: Bitmap? = null
+    private var x = 0F
+    private var y = 0F
 
     override fun onInit() = configs {
         isDebug = BuildConfig.DEBUG
@@ -37,6 +39,10 @@ object HookEntry : IYukiHookXposedInit {
                 after {
                     if (YukiHookAPI.Configs.isDebug) YLog.debug("Start hook packageName: $packageName")
                     bitmap = ResourcesCompat.getDrawable(moduleAppResources, R.drawable.pointer_arrow, moduleAppResources.newTheme())?.toBitmap()
+                    bitmap?.let { bitmap ->
+                        x = bitmap.width.toFloat() / 2F
+                        y = bitmap.height.toFloat() / 2F
+                    }
                     // activity.setIcon(fileDir ,bitmap)
                 }
             }
@@ -44,7 +50,7 @@ object HookEntry : IYukiHookXposedInit {
             ViewClass.method {
                 name = "onResolvePointerIcon"
             }.hook {
-                YLog.Configs.isEnable = false
+                YLog.Configs.isEnable = BuildConfig.DEBUG
                 before {
                      bitmap?.let { result = PointerIcon.create(it,0f,0f) }
                 }
