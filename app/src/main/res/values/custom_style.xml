@@ -1,0 +1,33 @@
+<resources>
+    <style name="Theme.RPointer.Default" parent="Theme.RPointer"/>
+    <style name="Theme.RPointer.Pink" parent="Theme.RPointer">
+        <item name="colorPrimary">@color/pink_light</item>
+        <item name="colorPrimaryDark">@color/pink_dark</item>
+        <item name="colorAccent">@color/pink_light</item>
+    </style>
+    <style name="Theme.RPointer.Blue" parent="Theme.RPointer">
+        <item name="colorPrimary">@android:color/holo_blue_light</item>
+        <item name="colorPrimaryDark">@android:color/holo_blue_dark</item>
+        <item name="colorAccent">@android:color/holo_blue_light</item>
+    </style>
+    <style name="Theme.RPointer.Yellow" parent="Theme.RPointer">
+        <item name="colorPrimary">@color/yellow_light</item>
+        <item name="colorPrimaryDark">@color/yellow_dark</item>
+        <item name="colorAccent">@color/yellow_light</item>
+    </style>
+    <style name="Theme.RPointer.Green" parent="Theme.RPointer">
+        <item name="colorPrimary">@android:color/holo_green_light</item>
+        <item name="colorPrimaryDark">@android:color/holo_green_dark</item>
+        <item name="colorAccent">@android:color/holo_green_light</item>
+    </style>
+    <style name="Theme.RPointer.Red" parent="Theme.RPointer">
+        <item name="colorPrimary">@android:color/holo_red_light</item>
+        <item name="colorPrimaryDark">@android:color/holo_red_dark</item>
+        <item name="colorAccent">@android:color/holo_red_light</item>
+    </style>
+    <style name="Theme.RPointer.Orange" parent="Theme.RPointer">
+        <item name="colorPrimary">@android:color/holo_orange_light</item>
+        <item name="colorPrimaryDark">@android:color/holo_orange_dark</item>
+        <item name="colorAccent">@android:color/holo_orange_light</item>
+    </style>
+</resources>

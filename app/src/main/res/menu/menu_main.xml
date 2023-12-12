@@ -6,4 +6,12 @@
           android:title="@string/action_minimize"
           android:orderInCategory="100"
           app:showAsAction="never"/>
+    <item android:id="@+id/action_theme"
+          android:title="@string/theme_color"
+          android:orderInCategory="200"
+          app:showAsAction="never"/>
+    <item android:id="@+id/action_language"
+          android:title="@string/language_setting"
+          android:orderInCategory="300"
+          app:showAsAction="never"/>
 </menu>

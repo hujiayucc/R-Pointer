@@ -45,10 +45,17 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
-    buildFeatures {
-        buildConfig = true
+    packaging {
+        resources {
+            excludes += "META-INF/*.version"
+            excludes += "okhttp3/**"
+            excludes += "kotlin/**"
+            excludes += "**.properties"
+            excludes += "**.bin"
+        }
     }
 }
 

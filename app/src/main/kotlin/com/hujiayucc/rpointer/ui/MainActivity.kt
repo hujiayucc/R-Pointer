@@ -9,40 +9,60 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.color.DynamicColors
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.highcapable.yukihookapi.YukiHookAPI
 import com.highcapable.yukihookapi.hook.log.YLog
 import com.highcapable.yukihookapi.hook.xposed.parasitic.activity.base.ModuleAppCompatActivity
 import com.hujiayucc.rpointer.BuildConfig
 import com.hujiayucc.rpointer.R
 import com.hujiayucc.rpointer.databinding.ActivityMainBinding
+import com.hujiayucc.rpointer.utils.Data
+import com.hujiayucc.rpointer.utils.Data.language
+import com.hujiayucc.rpointer.utils.Data.languageItem
+import com.hujiayucc.rpointer.utils.Data.prefsData
+import com.hujiayucc.rpointer.utils.Data.recyclerState
+import com.hujiayucc.rpointer.utils.Data.themeItems
+import com.hujiayucc.rpointer.utils.Data.themeList
+import com.hujiayucc.rpointer.utils.Data.themePref
+import com.hujiayucc.rpointer.utils.Language
 import java.text.SimpleDateFormat
 import java.util.*
 
+@Suppress("DEPRECATION")
 class MainActivity : ModuleAppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CustomAdapter
-    private lateinit var imageModelArrayList: ArrayList<ImageModel>
+    private lateinit var imageModelArrayList: ArrayList<ImageModel<Any>>
     private var recyclerItem = hashMapOf<String, Int>()
 
     init {
-        recyclerItem["默认"] = R.drawable.pointer_arrow
-        recyclerItem["默认2"] = R.drawable.ic_launcher_background
-        recyclerItem["默认3"] = R.drawable.ic_success
-        recyclerItem["默认4"] = R.drawable.ic_launcher_foreground
-        recyclerItem["默认5"] = R.drawable.ic_warn
-        recyclerItem["默认6"] = R.drawable.pointer_arrow
-        recyclerItem["默认7"] = R.drawable.ic_launcher_background
-        recyclerItem["默认8"] = R.drawable.ic_success
-        recyclerItem["默认9"] = R.drawable.ic_launcher_foreground
-        recyclerItem["默认10"] = R.drawable.ic_warn
+        recyclerItem["Default"] = R.drawable.pointer_arrow
+        recyclerItem["Default2"] = R.drawable.pointer_arrow
+        recyclerItem["Default3"] = R.drawable.pointer_arrow
+        recyclerItem["Default4"] = R.drawable.pointer_arrow
+        recyclerItem["Default5"] = R.drawable.pointer_arrow
+        recyclerItem["Default6"] = R.drawable.pointer_arrow
+        recyclerItem["Default7"] = R.drawable.pointer_arrow
+        recyclerItem["Default8"] = R.drawable.pointer_arrow
+        recyclerItem["Default9"] = R.drawable.pointer_arrow
+        recyclerItem["Default10"] = R.drawable.pointer_arrow
+        recyclerItem["Default11"] = R.drawable.pointer_arrow
+        recyclerItem["Default12"] = R.drawable.pointer_arrow
+        recyclerItem["Default13"] = R.drawable.pointer_arrow
+        recyclerItem["Default14"] = R.drawable.pointer_arrow
     }
 
     private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
     private val buildTime: String = format.format(Date(YukiHookAPI.Status.compiledTimestamp))
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val themeItem = prefsData.get(themePref)
+        setTheme(themeList[themeItem])
+        val language = prefsData.get(language)
+        if (language != 0) checkLanguage(Language.fromId(language))
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         recyclerView = binding.recycler
@@ -60,12 +80,13 @@ class MainActivity : ModuleAppCompatActivity() {
 
         binding.mainActiveStatus.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_header, theme)
         binding.mainVersion.text = getString(R.string.main_version).format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
-        binding.mainDate.text = "Build Time: ${buildTime}"
+        binding.mainDate.text = getString(R.string.buildTlite).format(buildTime)
 
         val layoutManager = GridLayoutManager(applicationContext, 2)
         recyclerView.layoutManager = layoutManager
         adapter = CustomAdapter(this, imageModelArrayList)
         recyclerView.adapter = adapter
+        recyclerState?.let { recyclerView.layoutManager?.onRestoreInstanceState(it) }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -77,6 +98,41 @@ class MainActivity : ModuleAppCompatActivity() {
         return when (item.itemId) {
             R.id.action_minimize -> {
                 super.finishAndRemoveTask()
+                true
+            }
+            R.id.action_theme -> {
+                val checkedItem = prefsData.get(themePref)
+
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.theme_color))
+                    .setSingleChoiceItems(themeItems, checkedItem) { dialog, which ->
+                        @Suppress("DEPRECATION")
+                        DynamicColors.applyToActivitiesIfAvailable(application, themeList[which])
+                        prefsData.edit {
+                            put(themePref, which)
+                            commit()
+                        }
+                        dialog.dismiss()
+                        recreate()
+                    }
+                    .create().show()
+                true
+            }
+            R.id.action_language -> {
+                val checkedItem = prefsData.get(language)
+
+                MaterialAlertDialogBuilder(this)
+                    .setTitle(getString(R.string.language_setting))
+                    .setSingleChoiceItems(languageItem, checkedItem) { dialog, which ->
+                        checkLanguage(Language.fromId(prefsData.get(language)))
+                        prefsData.edit {
+                            put(language, which)
+                            commit()
+                        }
+                        dialog.dismiss()
+                        recreate()
+                    }
+                    .create().show()
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -100,6 +156,7 @@ class MainActivity : ModuleAppCompatActivity() {
         try {
             val manager: ActivityManager = getSystemService(ACTIVITY_SERVICE) as ActivityManager
             for (appTask in manager.appTasks) {
+                @Suppress("DEPRECATION")
                 if (appTask.taskInfo.id == taskId) {
                     appTask.setExcludeFromRecents(exclude)
                 }
@@ -109,12 +166,26 @@ class MainActivity : ModuleAppCompatActivity() {
         }
     }
 
-    private fun populateList(): ArrayList<ImageModel> {
-        val list = ArrayList<ImageModel>()
-        for (i in recyclerItem) {
-            val imageModel = ImageModel()
-            imageModel.name = i.key
-            imageModel.imageUrl = i.value
+    @Suppress("DEPRECATION")
+    private fun checkLanguage(language: Locale) {
+        val configuration = resources.configuration
+        configuration.setLocale(language)
+        resources.updateConfiguration(configuration, resources.displayMetrics)
+        val locale = resources.configuration.locale
+        if (Language.fromId(prefsData.get(Data.language)) != locale) recreate()
+    }
+
+    override fun recreate() {
+        recyclerState = recyclerView.layoutManager?.onSaveInstanceState()
+        super.recreate()
+    }
+
+    private fun populateList(): ArrayList<ImageModel<Any>> {
+        val list = ArrayList<ImageModel<Any>>()
+        for (item in recyclerItem) {
+            val imageModel = ImageModel<Any>()
+            imageModel.name = item.key
+            imageModel.image = item.value
             list.add(imageModel)
         }
         return list

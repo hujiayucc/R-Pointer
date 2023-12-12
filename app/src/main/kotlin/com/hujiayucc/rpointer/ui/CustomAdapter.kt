@@ -7,11 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hujiayucc.rpointer.R
 import java.util.ArrayList
 
-class CustomAdapter(private val context: Context, private val imageModelArrayList: ArrayList<ImageModel>)
+class CustomAdapter(private val context: Context, private val imageModelArrayList: ArrayList<ImageModel<Any>>)
     : RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
 
     inner class MyViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -28,7 +29,12 @@ class CustomAdapter(private val context: Context, private val imageModelArrayLis
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val model = imageModelArrayList[position]
-        holder.imageView.setImageResource(model.imageUrl)
+        val imageView = holder.imageView
+        if (model.type == Type.App)
+            (model as ImageModel<Int>).image?.let {
+                imageView.setImageResource(it)
+                imageView.minimumHeight = 350
+            }
         holder.textView.text = model.name
     }
 

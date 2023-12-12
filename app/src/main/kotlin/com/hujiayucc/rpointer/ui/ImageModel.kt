@@ -1,6 +1,13 @@
 package com.hujiayucc.rpointer.ui
 
-data class ImageModel (
+data class ImageModel<T> (
     var name: String = "",
-    var imageUrl: Int = 0
+    var type: Type = Type.App,
+    var image: T? = null
 )
+
+enum class Type {
+    App,
+    Local,
+    Internet
+}
