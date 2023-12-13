@@ -3,6 +3,7 @@
         <item name="headerTextColor">@color/white</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="pointerIconColor">?attr/colorPrimary</item>
     </style>
 
     <style name="Theme.RPointer" parent="Base.Theme.RPointer"/>

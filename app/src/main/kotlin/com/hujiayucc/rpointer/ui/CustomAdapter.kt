@@ -7,10 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.hujiayucc.rpointer.R
-import java.util.ArrayList
 
 class CustomAdapter(private val context: Context, private val imageModelArrayList: ArrayList<ImageModel<Any>>)
     : RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {

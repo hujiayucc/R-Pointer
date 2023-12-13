@@ -18,4 +18,6 @@
     <string name="language_english">English</string>
     <string name="language_chinese">简体中文</string>
     <string name="language_setting">Language Setting</string>
+    <string name="pointer_icon_hide">Hide</string>
+    <string name="pointer_icon_default">Default</string>
 </resources>

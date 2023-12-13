@@ -3,9 +3,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clickable="true"
+    android:focusable="true"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="10dp"
+    android:layout_marginLeft="20dp"
+    android:layout_marginRight="20dp"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="5dp">
+    android:background="@drawable/bg_list_custom_item">
 
     <ImageView
         android:id="@+id/iv"
@@ -18,5 +24,5 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:layout_marginTop="10dp"/>
+        android:layout_marginBottom="10dp"/>
 </LinearLayout>

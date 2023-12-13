@@ -1,6 +1,7 @@
 package com.hujiayucc.rpointer.ui
 
 import android.app.ActivityManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -9,17 +10,17 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.color.DynamicColors
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.highcapable.yukihookapi.YukiHookAPI
 import com.highcapable.yukihookapi.hook.log.YLog
+import com.highcapable.yukihookapi.hook.xposed.application.ModuleApplication.Companion.appContext
 import com.highcapable.yukihookapi.hook.xposed.parasitic.activity.base.ModuleAppCompatActivity
 import com.hujiayucc.rpointer.BuildConfig
 import com.hujiayucc.rpointer.R
 import com.hujiayucc.rpointer.databinding.ActivityMainBinding
-import com.hujiayucc.rpointer.utils.Data
-import com.hujiayucc.rpointer.utils.Data.language
 import com.hujiayucc.rpointer.utils.Data.languageItem
+import com.hujiayucc.rpointer.utils.Data.languages
+import com.hujiayucc.rpointer.utils.Data.localeList
 import com.hujiayucc.rpointer.utils.Data.prefsData
 import com.hujiayucc.rpointer.utils.Data.recyclerState
 import com.hujiayucc.rpointer.utils.Data.themeItems
@@ -39,38 +40,16 @@ class MainActivity : ModuleAppCompatActivity() {
     private var recyclerItem = hashMapOf<String, Int>()
 
     init {
-        recyclerItem["Default"] = R.drawable.pointer_arrow
-        recyclerItem["Default2"] = R.drawable.pointer_arrow
-        recyclerItem["Default3"] = R.drawable.pointer_arrow
-        recyclerItem["Default4"] = R.drawable.pointer_arrow
-        recyclerItem["Default5"] = R.drawable.pointer_arrow
-        recyclerItem["Default6"] = R.drawable.pointer_arrow
-        recyclerItem["Default7"] = R.drawable.pointer_arrow
-        recyclerItem["Default8"] = R.drawable.pointer_arrow
-        recyclerItem["Default9"] = R.drawable.pointer_arrow
-        recyclerItem["Default10"] = R.drawable.pointer_arrow
-        recyclerItem["Default11"] = R.drawable.pointer_arrow
-        recyclerItem["Default12"] = R.drawable.pointer_arrow
-        recyclerItem["Default13"] = R.drawable.pointer_arrow
-        recyclerItem["Default14"] = R.drawable.pointer_arrow
+        appContext.initLocalIcon()
     }
 
-    private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-    private val buildTime: String = format.format(Date(YukiHookAPI.Status.compiledTimestamp))
+    private fun Context.initLocalIcon() {
+        recyclerItem.clear()
+        recyclerItem[getString(R.string.pointer_icon_hide)] = R.drawable.pointer_hide
+        recyclerItem[getString(R.string.pointer_icon_default)] = R.drawable.pointer_arrow
+    }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val themeItem = prefsData.get(themePref)
-        setTheme(themeList[themeItem])
-        val language = prefsData.get(language)
-        if (language != 0) checkLanguage(Language.fromId(language))
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        recyclerView = binding.recycler
-        imageModelArrayList = populateList()
-
-        setContentView(binding.root)
-        setSupportActionBar(binding.toolbar)
-
+    private fun Context.setText() {
         if (YukiHookAPI.Status.isModuleActive) {
             binding.mainImgStatus.setImageResource(R.drawable.ic_success)
             binding.mainStatus.text = getString(R.string.is_active)
@@ -81,6 +60,24 @@ class MainActivity : ModuleAppCompatActivity() {
         binding.mainActiveStatus.background = ResourcesCompat.getDrawable(resources, R.drawable.bg_header, theme)
         binding.mainVersion.text = getString(R.string.main_version).format(BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE)
         binding.mainDate.text = getString(R.string.buildTlite).format(buildTime)
+    }
+
+    private val format = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+    private val buildTime: String = format.format(Date(YukiHookAPI.Status.compiledTimestamp))
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        val themeItem = prefsData.get(themePref)
+        setTheme(themeList[themeItem])
+        val language = prefsData.get(languages)
+        if (language != 0) checkLanguage(Language.fromId(language),true)
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        recyclerView = binding.recycler
+        imageModelArrayList = populateList()
+
+        setContentView(binding.root)
+        setSupportActionBar(binding.toolbar)
+        setText()
 
         val layoutManager = GridLayoutManager(applicationContext, 2)
         recyclerView.layoutManager = layoutManager
@@ -102,12 +99,10 @@ class MainActivity : ModuleAppCompatActivity() {
             }
             R.id.action_theme -> {
                 val checkedItem = prefsData.get(themePref)
-
                 MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.theme_color))
                     .setSingleChoiceItems(themeItems, checkedItem) { dialog, which ->
-                        @Suppress("DEPRECATION")
-                        DynamicColors.applyToActivitiesIfAvailable(application, themeList[which])
+                        setTheme(themeList[which])
                         prefsData.edit {
                             put(themePref, which)
                             commit()
@@ -119,14 +114,14 @@ class MainActivity : ModuleAppCompatActivity() {
                 true
             }
             R.id.action_language -> {
-                val checkedItem = prefsData.get(language)
+                val checkedItem = prefsData.get(languages)
 
                 MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.language_setting))
                     .setSingleChoiceItems(languageItem, checkedItem) { dialog, which ->
-                        checkLanguage(Language.fromId(prefsData.get(language)))
+                        checkLanguage(localeList[which],false)
                         prefsData.edit {
-                            put(language, which)
+                            put(languages, which)
                             commit()
                         }
                         dialog.dismiss()
@@ -167,12 +162,15 @@ class MainActivity : ModuleAppCompatActivity() {
     }
 
     @Suppress("DEPRECATION")
-    private fun checkLanguage(language: Locale) {
+    private fun checkLanguage(language: Locale, isInit: Boolean) {
         val configuration = resources.configuration
         configuration.setLocale(language)
         resources.updateConfiguration(configuration, resources.displayMetrics)
-        val locale = resources.configuration.locale
-        if (Language.fromId(prefsData.get(Data.language)) != locale) recreate()
+        initLocalIcon()
+        if (isInit.not()) {
+            setText()
+            recreate()
+        }
     }
 
     override fun recreate() {

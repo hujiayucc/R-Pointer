@@ -3,5 +3,6 @@
         <item name="headerTextColor">@color/material_dynamic_neutral_variant90</item>
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
+        <item name="pointerIconColor">?attr/colorPrimary</item>
     </style>
 </resources>

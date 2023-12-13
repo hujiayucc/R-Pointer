@@ -5,12 +5,13 @@ import android.os.Parcelable
 import com.highcapable.yukihookapi.hook.factory.prefs
 import com.highcapable.yukihookapi.hook.xposed.prefs.data.PrefsData
 import com.hujiayucc.rpointer.R
+import java.util.*
 
 object Data {
     var recyclerState: Parcelable? = null
     val Context.prefsData get() = prefs("config")
     val themePref = PrefsData("themeItem", 0)
-    val language = PrefsData("language", 0)
+    val languages = PrefsData("language", 0)
     val themeList = intArrayOf(
         R.style.Theme_RPointer_Default,
         R.style.Theme_RPointer_Pink,
@@ -28,6 +29,11 @@ object Data {
         getString(R.string.green),
         getString(R.string.red),
         getString(R.string.orange)
+    )
+    val localeList = arrayOf(
+        Locale.getDefault(),
+        Locale.ENGLISH,
+        Locale.CHINESE
     )
     val Context.languageItem get() = arrayOf(
         getString(R.string.language_auto),

@@ -11,5 +11,9 @@ enum class Language(val id: Int, val locale: Locale) {
         fun fromId(id: Int): Locale {
             return entries.find { it.id == id }?.locale ?: Locale.getDefault()
         }
+
+        fun fromLocale(locale: Locale): Int {
+            return entries.find { it.locale == locale }?.id ?: 0
+        }
     }
 }

@@ -19,4 +19,6 @@
     <string name="language_english">English</string>
     <string name="language_chinese">简体中文</string>
     <string name="language_setting">语言设置</string>
+    <string name="pointer_icon_hide">隐藏</string>
+    <string name="pointer_icon_default">默认</string>
 </resources>
