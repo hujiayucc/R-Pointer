@@ -7,6 +7,8 @@ import com.highcapable.yukihookapi.hook.log.YLog
 import com.highcapable.yukihookapi.hook.xposed.proxy.IYukiHookXposedInit
 import com.hujiayucc.rpointer.BuildConfig
 import com.hujiayucc.rpointer.application.Application
+import com.hujiayucc.rpointer.hook.base.Base.x
+import com.hujiayucc.rpointer.hook.base.Base.y
 import com.hujiayucc.rpointer.hook.hooker.AppIcon
 import com.hujiayucc.rpointer.ui.adapter.Type
 import com.hujiayucc.rpointer.utils.Data.hookType
@@ -21,6 +23,8 @@ object HookEntry : IYukiHookXposedInit {
 
     override fun onHook() = YukiHookAPI.encase {
         val type = prefs.get(hookType)
+        x = prefs.getFloat("hotspotX")
+        y = prefs.getFloat("hotspotY")
         loadApp(packageName) {
             when (type) {
                 Type.App.name -> loadHooker(AppIcon)

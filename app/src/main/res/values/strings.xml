@@ -21,4 +21,7 @@
     <string name="pointer_icon_hide">Hide</string>
     <string name="pointer_icon_default">Default</string>
     <string name="pointer_icon_add">Add</string>
+    <string name="pointer_icon_windows">Windows</string>
+    <string name="hotspot_setting">Hotspot Setting</string>
+    <string name="done">Done</string>
 </resources>
