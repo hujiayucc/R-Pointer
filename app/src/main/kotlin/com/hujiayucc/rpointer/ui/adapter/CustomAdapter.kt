@@ -1,4 +1,4 @@
-package com.hujiayucc.rpointer.ui
+package com.hujiayucc.rpointer.ui.adapter
 
 // Import necessary modules
 import android.content.Context
@@ -8,7 +8,11 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.highcapable.yukihookapi.hook.factory.prefs
+import com.highcapable.yukihookapi.hook.xposed.application.ModuleApplication.Companion.appContext
 import com.hujiayucc.rpointer.R
+import com.hujiayucc.rpointer.utils.Data.hookIcon
+import com.hujiayucc.rpointer.utils.Data.hookType
 
 class CustomAdapter(private val context: Context, private val imageModelArrayList: ArrayList<ImageModel<Any>>)
     : RecyclerView.Adapter<CustomAdapter.MyViewHolder>() {
@@ -28,11 +32,21 @@ class CustomAdapter(private val context: Context, private val imageModelArrayLis
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val model = imageModelArrayList[position]
         val imageView = holder.imageView
-        if (model.type == Type.App)
+        if (model.type == Type.App) {
             (model as ImageModel<Int>).image?.let {
                 imageView.setImageResource(it)
                 imageView.minimumHeight = 350
             }
+
+            holder.itemView.setOnClickListener {
+                appContext.prefs().edit {
+                    put(hookType, model.type.name)
+                    (model as ImageModel<Int>).image?.let {
+                        put(hookIcon, it)
+                    }
+                }
+            }
+        }
         holder.textView.text = model.name
     }
 

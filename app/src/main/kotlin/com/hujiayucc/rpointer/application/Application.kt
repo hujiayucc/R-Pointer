@@ -1,4 +1,4 @@
-package com.hujiayucc.rpointer.appliication
+package com.hujiayucc.rpointer.application
 
 import com.highcapable.yukihookapi.hook.log.YLog
 import com.highcapable.yukihookapi.hook.xposed.application.ModuleApplication

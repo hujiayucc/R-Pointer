@@ -1,4 +1,4 @@
-package com.hujiayucc.rpointer.ui
+package com.hujiayucc.rpointer.ui.adapter
 
 data class ImageModel<T> (
     var name: String = "",

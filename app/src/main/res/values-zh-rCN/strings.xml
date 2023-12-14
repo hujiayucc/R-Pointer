@@ -21,4 +21,5 @@
     <string name="language_setting">语言设置</string>
     <string name="pointer_icon_hide">隐藏</string>
     <string name="pointer_icon_default">默认</string>
+    <string name="pointer_icon_add">加号</string>
 </resources>

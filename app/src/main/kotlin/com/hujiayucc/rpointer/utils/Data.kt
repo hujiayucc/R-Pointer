@@ -1,17 +1,19 @@
 package com.hujiayucc.rpointer.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Parcelable
-import com.highcapable.yukihookapi.hook.factory.prefs
 import com.highcapable.yukihookapi.hook.xposed.prefs.data.PrefsData
 import com.hujiayucc.rpointer.R
+import com.hujiayucc.rpointer.ui.adapter.Type
 import java.util.*
 
 object Data {
     var recyclerState: Parcelable? = null
-    val Context.prefsData get() = prefs("config")
     val themePref = PrefsData("themeItem", 0)
     val languages = PrefsData("language", 0)
+    val hookType = PrefsData("hookType", Type.App.name)
+    val hookIcon = PrefsData<Any>("hookIcon", R.drawable.pointer_arrow)
     val themeList = intArrayOf(
         R.style.Theme_RPointer_Default,
         R.style.Theme_RPointer_Pink,
@@ -21,6 +23,7 @@ object Data {
         R.style.Theme_RPointer_Red,
         R.style.Theme_RPointer_Orange
     )
+    var recyclerItem = hashMapOf<String, Int>()
     val Context.themeItems get() = arrayOf(
         getString(R.string.theme_default),
         getString(R.string.pink),
@@ -30,6 +33,7 @@ object Data {
         getString(R.string.red),
         getString(R.string.orange)
     )
+    @SuppressLint("ConstantLocale")
     val localeList = arrayOf(
         Locale.getDefault(),
         Locale.ENGLISH,

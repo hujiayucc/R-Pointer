@@ -1,4 +1,4 @@
-package com.hujiayucc.rpointer.ui
+package com.hujiayucc.rpointer.ui.activity
 
 import android.app.ActivityManager
 import android.content.Context
@@ -12,16 +12,19 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.highcapable.yukihookapi.YukiHookAPI
+import com.highcapable.yukihookapi.hook.factory.prefs
 import com.highcapable.yukihookapi.hook.log.YLog
 import com.highcapable.yukihookapi.hook.xposed.application.ModuleApplication.Companion.appContext
 import com.highcapable.yukihookapi.hook.xposed.parasitic.activity.base.ModuleAppCompatActivity
 import com.hujiayucc.rpointer.BuildConfig
 import com.hujiayucc.rpointer.R
 import com.hujiayucc.rpointer.databinding.ActivityMainBinding
+import com.hujiayucc.rpointer.ui.adapter.CustomAdapter
+import com.hujiayucc.rpointer.ui.adapter.ImageModel
 import com.hujiayucc.rpointer.utils.Data.languageItem
 import com.hujiayucc.rpointer.utils.Data.languages
 import com.hujiayucc.rpointer.utils.Data.localeList
-import com.hujiayucc.rpointer.utils.Data.prefsData
+import com.hujiayucc.rpointer.utils.Data.recyclerItem
 import com.hujiayucc.rpointer.utils.Data.recyclerState
 import com.hujiayucc.rpointer.utils.Data.themeItems
 import com.hujiayucc.rpointer.utils.Data.themeList
@@ -37,7 +40,6 @@ class MainActivity : ModuleAppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: CustomAdapter
     private lateinit var imageModelArrayList: ArrayList<ImageModel<Any>>
-    private var recyclerItem = hashMapOf<String, Int>()
 
     init {
         appContext.initLocalIcon()
@@ -47,6 +49,7 @@ class MainActivity : ModuleAppCompatActivity() {
         recyclerItem.clear()
         recyclerItem[getString(R.string.pointer_icon_hide)] = R.drawable.pointer_hide
         recyclerItem[getString(R.string.pointer_icon_default)] = R.drawable.pointer_arrow
+        recyclerItem[getString(R.string.pointer_icon_add)] = R.drawable.pointer_add
     }
 
     private fun Context.setText() {
@@ -66,9 +69,9 @@ class MainActivity : ModuleAppCompatActivity() {
     private val buildTime: String = format.format(Date(YukiHookAPI.Status.compiledTimestamp))
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val themeItem = prefsData.get(themePref)
+        val themeItem = appContext.prefs().get(themePref)
         setTheme(themeList[themeItem])
-        val language = prefsData.get(languages)
+        val language = appContext.prefs().get(languages)
         if (language != 0) checkLanguage(Language.fromId(language),true)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -98,12 +101,13 @@ class MainActivity : ModuleAppCompatActivity() {
                 true
             }
             R.id.action_theme -> {
-                val checkedItem = prefsData.get(themePref)
+                val checkedItem = appContext.prefs().get(themePref)
                 MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.theme_color))
                     .setSingleChoiceItems(themeItems, checkedItem) { dialog, which ->
+                        if (checkedItem == which) return@setSingleChoiceItems
                         setTheme(themeList[which])
-                        prefsData.edit {
+                        appContext.prefs().edit {
                             put(themePref, which)
                             commit()
                         }
@@ -114,13 +118,14 @@ class MainActivity : ModuleAppCompatActivity() {
                 true
             }
             R.id.action_language -> {
-                val checkedItem = prefsData.get(languages)
+                val checkedItem = appContext.prefs().get(languages)
 
                 MaterialAlertDialogBuilder(this)
                     .setTitle(getString(R.string.language_setting))
                     .setSingleChoiceItems(languageItem, checkedItem) { dialog, which ->
+                        if (checkedItem == which) return@setSingleChoiceItems
                         checkLanguage(localeList[which],false)
-                        prefsData.edit {
+                        appContext.prefs().edit {
                             put(languages, which)
                             commit()
                         }
