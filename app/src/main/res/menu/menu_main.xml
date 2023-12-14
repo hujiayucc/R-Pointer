@@ -14,4 +14,8 @@
           android:title="@string/language_setting"
           android:orderInCategory="300"
           app:showAsAction="never"/>
+    <item android:id="@+id/action_hotspot"
+          android:title="@string/hotspot_setting"
+          android:orderInCategory="400"
+          app:showAsAction="never"/>
 </menu>

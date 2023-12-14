@@ -2,7 +2,6 @@ package com.hujiayucc.rpointer.hook.hooker
 
 import android.app.Activity
 import android.view.PointerIcon
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.toBitmap
 import com.highcapable.yukihookapi.YukiHookAPI
@@ -19,7 +18,10 @@ import com.hujiayucc.rpointer.hook.base.Base.setIcon
 import com.hujiayucc.rpointer.hook.base.Base.x
 import com.hujiayucc.rpointer.hook.base.Base.y
 import com.hujiayucc.rpointer.ui.adapter.Type
-import com.hujiayucc.rpointer.utils.Data
+import com.hujiayucc.rpointer.utils.Data.hookIcon
+import com.hujiayucc.rpointer.utils.Data.hookType
+import com.hujiayucc.rpointer.utils.Data.themeList
+import com.hujiayucc.rpointer.utils.Data.themePref
 
 object AppIcon: YukiBaseHooker() {
     override fun onHook() {
@@ -29,21 +31,20 @@ object AppIcon: YukiBaseHooker() {
         }.hook {
             after {
                 if (YukiHookAPI.Configs.isDebug) YLog.debug("Start hook packageName: $packageName")
-                val type = prefs.get(Data.hookType)
+                val type = prefs.get(hookType)
+                val resources = moduleAppResources
+                val themeItem = prefs.get(themePref)
+                val theme = resources.newTheme()
+                theme.applyStyle(themeList[themeItem],true)
                 if (type == Type.App.name) {
                     bitmap = ResourcesCompat.getDrawable(
-                        moduleAppResources,
-                        prefs.getInt(Data.hookIcon.key, R.drawable.pointer_arrow),
-                        moduleAppResources.newTheme()
+                        resources,
+                        prefs.getInt(hookIcon.key, R.drawable.pointer_arrow),
+                        theme
                     )?.toBitmap()
-                    bitmap?.let { bitmap ->
-                        x = bitmap.width.toFloat() / 2F
-                        y = bitmap.height.toFloat() / 2F
-                    }
                 }
                 val activity = this.instance<Activity>()
                 activity.setIcon(bitmap)
-                Toast.makeText(activity, "${prefs.get(Data.hookIcon)}", Toast.LENGTH_SHORT).show()
             }
         }
 

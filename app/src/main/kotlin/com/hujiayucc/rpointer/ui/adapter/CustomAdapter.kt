@@ -34,7 +34,10 @@ class CustomAdapter(private val context: Context, private val imageModelArrayLis
         val imageView = holder.imageView
         if (model.type == Type.App) {
             (model as ImageModel<Int>).image?.let {
-                imageView.setImageResource(it)
+                if (model.name != context.getString(R.string.pointer_icon_hide))
+                    imageView.setImageResource(it)
+                else
+                    imageView.setImageResource(R.drawable.pointer_icon_hide)
                 imageView.minimumHeight = 350
             }
 

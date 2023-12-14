@@ -15,8 +15,8 @@ android {
         minSdk = 24
         //noinspection EditedTargetSdkVersion
         targetSdk = 34
-        versionCode = 100
-        versionName = "1.0.0"
+        versionCode = 200
+        versionName = "1.0.1"
         project.archivesName = "${rootProject.name}-${versionName}"
     }
 

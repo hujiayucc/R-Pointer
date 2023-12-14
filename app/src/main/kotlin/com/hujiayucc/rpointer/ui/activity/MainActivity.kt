@@ -4,9 +4,11 @@ import android.app.ActivityManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.EditText
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -50,6 +52,7 @@ class MainActivity : ModuleAppCompatActivity() {
         recyclerItem[getString(R.string.pointer_icon_hide)] = R.drawable.pointer_hide
         recyclerItem[getString(R.string.pointer_icon_default)] = R.drawable.pointer_arrow
         recyclerItem[getString(R.string.pointer_icon_add)] = R.drawable.pointer_add
+        recyclerItem[getString(R.string.pointer_icon_windows)] = R.drawable.pointer_windows
     }
 
     private fun Context.setText() {
@@ -135,6 +138,30 @@ class MainActivity : ModuleAppCompatActivity() {
                     .create().show()
                 true
             }
+            R.id.action_hotspot -> {
+                val x = appContext.prefs().getFloat("hotspotX")
+                val y = appContext.prefs().getFloat("hotspotY")
+
+                val context = this
+
+                val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_hotspot,null)
+                val hotspotX = dialogView.findViewById<EditText>(R.id.hotspotX)
+                val hotspotY = dialogView.findViewById<EditText>(R.id.hotspotY)
+                hotspotX.setText(x.toString())
+                hotspotY.setText(y.toString())
+                val builder = MaterialAlertDialogBuilder(context)
+                builder.setTitle(getString(R.string.hotspot_setting))
+                    .setView(dialogView)
+                    .setPositiveButton(getString(R.string.done)) { dialog, _ ->
+                        appContext.prefs().edit {
+                            putFloat("hotspotX", hotspotX.text.toString().toFloat())
+                            putFloat("hotspotY", hotspotY.text.toString().toFloat())
+                        }
+                        dialog.dismiss()
+                    }
+                builder.show()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -191,6 +218,7 @@ class MainActivity : ModuleAppCompatActivity() {
             imageModel.image = item.value
             list.add(imageModel)
         }
+        list.reverse()
         return list
     }
 }

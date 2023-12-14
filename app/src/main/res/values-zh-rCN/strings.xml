@@ -22,4 +22,7 @@
     <string name="pointer_icon_hide">隐藏</string>
     <string name="pointer_icon_default">默认</string>
     <string name="pointer_icon_add">加号</string>
+    <string name="pointer_icon_windows">Windows</string>
+    <string name="hotspot_setting">Hotspot 设置</string>
+    <string name="done">确定</string>
 </resources>
